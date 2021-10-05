@@ -1,8 +1,7 @@
-package main
+package models
 
 import (
 	"../labrpc"
-	"../models"
 	"fmt"
 	"strconv"
 )
@@ -20,8 +19,8 @@ type Cluster struct {
 	// using SEDA (google it if you have not heard about it), which allows us (and you) to inject some network failures
 	// during tests. Do remember that network failures should always be concerned in a distributed environment.
 	network *labrpc.Network
-	// the name of the cluster, also used as a network address of the cluster coordinator in the network above
-	name string
+	// the Name of the cluster, also used as a network address of the cluster coordinator in the network above
+	Name string
 }
 
 // NewCluster creates a Cluster with the given number of nodes and register the nodes to the given network.
@@ -40,7 +39,7 @@ func NewCluster(nodeNum int, network *labrpc.Network, clusterName string) *Clust
 	nodeNamePrefix := "Node"
 	for i := 0; i < nodeNum; i++ {
 		// identify the nodes with "Node0", "Node1", ...
-		node := models.NewNode(nodeNamePrefix + strconv.Itoa(i))
+		node := NewNode(nodeNamePrefix + strconv.Itoa(i))
 		nodeIds[i] = node.Identifier
 		// use go reflection to extract the methods in a Node object and make them as a service.
 		// a service can be viewed as a list of methods that a server provides.
@@ -57,7 +56,7 @@ func NewCluster(nodeNum int, network *labrpc.Network, clusterName string) *Clust
 	}
 
 	// create a cluster with the nodes and the network
-	c := &Cluster{nodeIds: nodeIds, network: network, name: clusterName}
+	c := &Cluster{nodeIds: nodeIds, network: network, Name: clusterName}
 	// create a coordinator for the cluster to receive external requests, the steps are similar to those above.
 	// notice that we use the reference of the cluster as the name of the coordinator server,
 	// and the names can be more than strings.
@@ -93,44 +92,11 @@ func (c *Cluster) SayHello(visitor string, reply *string) {
 		end.Call("Node.SayHello", argument, &reply)
 		fmt.Println(reply)
 	}
-	*reply = fmt.Sprintf("Hello %s, I am the coordinator of %s", visitor, c.name)
+	*reply = fmt.Sprintf("Hello %s, I am the coordinator of %s", visitor, c.Name)
 }
 
 // Join all tables in the given list using NATURAL JOIN (join on the common columns), and return the joined result
 // as a list of rows and set it to reply.
-func (c* Cluster) Join(tableNames []string, reply *[]models.Row) {
+func (c* Cluster) Join(tableNames []string, reply *[]Row) {
 	//TODO lab2
 }
-
-// main is an example about how to create a cluster, visit the cluster from outside it, and inject some errors to the
-// cluster. We will test your implementation using similar approaches.
-func main() {
-	// set up a network and a cluster
-	clusterName := "MyCluster"
-	network := labrpc.MakeNetwork()
-	c := NewCluster(3, network, clusterName)
-
-	// create a client and connect to the cluster
-	clientName := "ClientA"
-	cli := network.MakeEnd(clientName)
-	network.Connect(clientName, c.name)
-	network.Enable(clientName, true)
-
-	// send a request to the cluster
-	fmt.Println("Sending a greet to the cluster...")
-	reply := ""
-	cli.Call("Cluster.SayHello", clientName, &reply)
-	fmt.Println("The coordinator returns a reply:")
-	fmt.Println(reply)
-
-	// disable some nodes and resend the request
-	fmt.Println()
-	fmt.Println("Sending a greet with two nodes disabled")
-	network.DeleteServer("Node1")
-	network.DeleteServer("Node2")
-	reply = ""
-	cli.Call("Cluster.SayHello", clientName, &reply)
-	fmt.Println("The coordinator returns a reply:")
-	fmt.Println(reply)
-}
-
