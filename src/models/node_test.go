@@ -1,6 +1,7 @@
 package models
 
 import (
+	"../labrpc"
 	"fmt"
 	"strconv"
 	"testing"
@@ -82,5 +83,49 @@ func TestEmptyTable(t *testing.T) {
 	}
 	for iter.HasNext() {
 		fmt.Printf("%v\n", *iter.Next())
+	}
+}
+
+func TestScanTable(t *testing.T) {
+	network := labrpc.MakeNetwork()
+	n := NewNode(strconv.Itoa(0))
+	service := labrpc.MakeService(n)
+	server := labrpc.MakeServer()
+	server.AddService(service)
+	network.AddServer("server0", server)
+
+	ts := &TableSchema{TableName: "table0", ColumnSchemas: []ColumnSchema{
+		{Name: "name", DataType: TypeString},
+		{Name: "age", DataType: TypeInt32},
+		{Name: "grade", DataType: TypeFloat},
+	}}
+	err := n.CreateTable(ts)
+	if err != nil {
+		t.Error(err.Error())
+	}
+
+	rows := []Row{
+		{"John", 22, 4.0},
+		{"Smith", 23, 3.6},
+		{"Hana", 21, 4.0},
+	}
+	for _, row := range rows {
+		err := n.Insert("table0", &row)
+		if err != nil {
+			t.Error(err.Error())
+		}
+	}
+
+	end := network.MakeEnd("client0")
+	network.Connect("client0", "server0")
+	network.Enable("client0", true)
+
+	result := make([]Row, 0)
+	end.Call("Node.ScanTable", "table0", &result)
+	if len(result) != 3 {
+		println("Table content is incorrect")
+	}
+	for _, row := range result {
+		fmt.Printf("%v\n", row)
 	}
 }

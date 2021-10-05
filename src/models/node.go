@@ -30,7 +30,7 @@ func (n *Node) SayHello(args interface{}, reply *string) {
 // successfully, or an error if another table with the same name already exists.
 func (n *Node) CreateTable(schema *TableSchema) error {
 	// check if the table already exists
-	if _,ok := n.TableMap[schema.TableName]; ok {
+	if _, ok := n.TableMap[schema.TableName]; ok {
 		return errors.New("table already exists")
 	}
 	// create a table and store it in the map
@@ -66,7 +66,7 @@ func (n *Node) Remove(tableName string, row *Row) error {
 // IterateTable returns an iterator of the table through which the caller can retrieve all rows in the table in the
 // order they are inserted. It returns (iterator, nil) if the Table can be found, or (nil, err) if the Table does not
 // exist.
-func (n *Node) IterateTable(tableName string) (RowIterator, error)  {
+func (n *Node) IterateTable(tableName string) (RowIterator, error) {
 	if t, ok := n.TableMap[tableName]; ok {
 		return t.RowIterator(), nil
 	} else {
@@ -84,3 +84,21 @@ func (n *Node) count(tableName string) (int, error) {
 	}
 }
 
+// ScanTable returns all rows in a table by the specified name or nothing if it does not exist.
+// This method is recommended only to be used for TEST PURPOSE, and try not to use this method in your implementation,
+// but you can use it in your own test cases.
+// The reason why we deprecate this method is that in practice, every table is so large that you cannot transfer a whole
+// table through network all at once, so sending a whole table in one RPC is very impractical. One recommended way is to
+// fetch a batch of Rows a time.
+func (n *Node) ScanTable(tableName string, rows *[]Row) {
+	if t, ok := n.TableMap[tableName]; ok {
+		localRows := make([]Row, t.Count())
+		i := 0
+		iterator := t.RowIterator()
+		for iterator.HasNext() {
+			localRows[i] = *iterator.Next()
+			i = i + 1
+		}
+		*rows = localRows
+	}
+}
