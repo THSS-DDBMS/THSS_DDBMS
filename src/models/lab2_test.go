@@ -66,19 +66,7 @@ func TestLab2Basic(t *testing.T) {
 		{1, "Smith", 23, 3.6, 0},
 		{2, "Hana", 21, 4.0, 2},
 	}
-	if !compareRows(expected, results) {
+	if !compareRowsDisordered(expected, results) {
 		t.Errorf("Incorrect join results, expected %v, actual %v", expected, results)
 	}
-}
-
-func compareRows(expected []Row, actual []Row) bool {
-	if len(expected) != len(actual) {
-		return false
-	}
-	for i, row := range expected {
-		if !row.Equals(&actual[i]) {
-			return false
-		}
-	}
-	return true
 }
