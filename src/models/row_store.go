@@ -7,13 +7,25 @@ import (
 // Row is just an array of objects
 type Row []interface{}
 
-// Equals compare two rows by their length and each element
+// Equals compares two rows by their length and each element
 func (r *Row) Equals(another *Row) bool {
 	if len(*r) != len(*another) {
 		return false
 	}
 	for i, val := range *r {
 		if val != (*another)[i] {
+			return false
+		}
+	}
+	return true
+}
+
+// EqualsWithColumnMapping compares two rows each element with the provided columnMapping, which indicate the index of
+// each column of this row in another row. This method assumes, as the columnMapping is provided, the two rows have the
+// same length.
+func (r *Row) EqualsWithColumnMapping(another *Row, columnMapping []int) bool {
+	for i, column := range *r {
+		if column != (*another)[columnMapping[i]] {
 			return false
 		}
 	}

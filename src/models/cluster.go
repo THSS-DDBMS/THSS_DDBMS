@@ -97,6 +97,6 @@ func (c *Cluster) SayHello(visitor string, reply *string) {
 
 // Join all tables in the given list using NATURAL JOIN (join on the common columns), and return the joined result
 // as a list of rows and set it to reply.
-func (c* Cluster) Join(tableNames []string, reply *[]Row) {
+func (c* Cluster) Join(tableNames []string, reply *Dataset) {
 	//TODO lab2
 }

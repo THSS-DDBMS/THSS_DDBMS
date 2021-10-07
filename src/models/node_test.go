@@ -120,12 +120,19 @@ func TestScanTable(t *testing.T) {
 	network.Connect("client0", "server0")
 	network.Enable("client0", true)
 
-	result := make([]Row, 0)
+	result := Dataset{}
 	end.Call("Node.ScanTable", "table0", &result)
-	if len(result) != 3 {
+	if len(result.Rows) != 3 {
 		println("Table content is incorrect")
 	}
-	for _, row := range result {
+	fmt.Printf("%s\n", result.Schema.TableName)
+	headers := ""
+	for _, schema := range result.Schema.ColumnSchemas {
+		headers = headers + schema.Name + " "
+	}
+	fmt.Printf(headers + "\n")
+
+	for _, row := range result.Rows {
 		fmt.Printf("%v\n", row)
 	}
 }

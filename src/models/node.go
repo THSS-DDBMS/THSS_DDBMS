@@ -90,15 +90,20 @@ func (n *Node) count(tableName string) (int, error) {
 // The reason why we deprecate this method is that in practice, every table is so large that you cannot transfer a whole
 // table through network all at once, so sending a whole table in one RPC is very impractical. One recommended way is to
 // fetch a batch of Rows a time.
-func (n *Node) ScanTable(tableName string, rows *[]Row) {
+func (n *Node) ScanTable(tableName string, dataset *Dataset) {
 	if t, ok := n.TableMap[tableName]; ok {
-		localRows := make([]Row, t.Count())
+		resultSet := Dataset{}
+
+		tableRows := make([]Row, t.Count())
 		i := 0
 		iterator := t.RowIterator()
 		for iterator.HasNext() {
-			localRows[i] = *iterator.Next()
+			tableRows[i] = *iterator.Next()
 			i = i + 1
 		}
-		*rows = localRows
+
+		resultSet.Rows = tableRows
+		resultSet.Schema = *t.schema
+		*dataset = resultSet
 	}
 }
