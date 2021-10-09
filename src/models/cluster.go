@@ -100,3 +100,15 @@ func (c *Cluster) SayHello(visitor string, reply *string) {
 func (c* Cluster) Join(tableNames []string, reply *Dataset) {
 	//TODO lab2
 }
+
+func (c* Cluster) BuildTable(params []interface{}, reply *string) {
+	//schema := params[0]
+	//rules := params[1]
+
+}
+
+func (c* Cluster) FragmentWrite(params []interface{}, reply *string) {
+	//tableName := params[0]
+	//row := params[1]
+
+}
