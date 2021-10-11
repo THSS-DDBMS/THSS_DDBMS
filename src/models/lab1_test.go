@@ -70,7 +70,7 @@ func ignoredTestLab1Basic(t *testing.T) {
 		{Name: "LOC", DataType: TypeString},
 	}}
 	replyMsg := ""
-	cli.Call("Cluster.BuildTable", []interface{}{ts, rules}, replyMsg)
+	cli.Call("Cluster.BuildTable", []interface{}{ts, rules}, &replyMsg)
 
 	budgetRows := []Row{
 		{"P1", "Instrumentation", 150000, "Montreal"},

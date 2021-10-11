@@ -54,7 +54,7 @@ func ignoredTestLab2Basic(t *testing.T) {
 		{Name: "grade", DataType: TypeFloat},
 	}}
 	replyMsg := ""
-	cli.Call("Cluster.BuildTable", []interface{}{ts, studentTablePartitionRules}, replyMsg)
+	cli.Call("Cluster.BuildTable", []interface{}{ts, studentTablePartitionRules}, &replyMsg)
 
 	studentRows := []Row{
 		{0, "John", 22, 4.0},
@@ -87,7 +87,7 @@ func ignoredTestLab2Basic(t *testing.T) {
 		{Name: "courseId", DataType: TypeInt32},
 	}}
 	replyMsg = ""
-	cli.Call("Cluster.BuildTable", []interface{}{ts, courseRegistrationTablePartitionRules}, replyMsg)
+	cli.Call("Cluster.BuildTable", []interface{}{ts, courseRegistrationTablePartitionRules}, &replyMsg)
 
 	courseRegistrationRows := []Row{
 		{0, 0},
