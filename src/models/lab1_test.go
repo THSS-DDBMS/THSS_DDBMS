@@ -20,45 +20,11 @@ func TestLab1Basic(t *testing.T) {
 	network.Enable(clientName, true)
 
 	// create fragment rules
-	m := map[string]interface{}{
-		"0":map[string]interface{}{
-			"predicate":map[string]interface{}{
-				"BUDGET":[...]map[string]interface{}{{
-						"op": "<=",
-						"val": 250000,
-					},
-				},
-			},
-			"column":[...]string{
-				"PNO", "BUDGET",
-			},
-		},
-		"1":map[string]interface{}{
-			"predicate":map[string]interface{}{
-				"BUDGET":[...]map[string]interface{}{{
-					"op": "<=",
-					"val": 250000,
-				},
-				},
-			},
-			"column":[...]string{
-				"PNO", "PNAME", "LOC",
-			},
-		},
-		"2":map[string]interface{}{
-			"predicate":map[string]interface{}{
-				"BUDGET":[...]map[string]interface{}{{
-					"op": ">",
-					"val": 250000,
-				},
-				},
-			},
-			"column":[...]string{
-				"PNO", "PNAME", "BUDGET", "LOC",
-			},
-		},
-	}
-	rules, _ := json.Marshal(m)
+	var i interface{}
+	err := json.Unmarshal([]byte(`{"0": {"predicate": {"BUDGET":[{"op": "<=", "val": 250000}]}, "column": ["PNO", "BUDGET"]},"1": {"predicate": {"BUDGET":[{"op": "<=", "val": 250000}]}, "column": ["PNO", "PNAME", "LOC"]},"2": {"predicate": {"BUDGET":[{"op": ">", "val": 250000}]}, "column": ["PNO", "PNAME", "BUDGET", "LOC"]}}`), &i)
+	if err != nil {return}
+	m := i.(map[string]interface{})
+	rules,_ := json.Marshal(m)
 	fmt.Printf("map_json=%v\n", string(rules))
 
 	// use the client to create table and insert
