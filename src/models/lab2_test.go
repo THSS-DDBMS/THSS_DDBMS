@@ -1,6 +1,9 @@
 package models
 
-import "testing"
+import (
+	"encoding/json"
+	"testing"
+)
 import "../labrpc"
 
 func ignoredTestLab2Basic(t *testing.T) {
@@ -17,7 +20,33 @@ func ignoredTestLab2Basic(t *testing.T) {
 
 	// use the client to create table and insert
 	studentTableName := "student"
-	studentTablePartitionRules := "some rules for student table"
+	m := map[string]interface{}{
+		"0":map[string]interface{}{
+			"predicate":map[string]interface{}{
+				"grade":[...]map[string]interface{}{{
+					"op": "<=",
+					"val": 3.6,
+				},
+				},
+			},
+			"column":[...]string{
+				"sid", "name", "age", "grade",
+			},
+		},
+		"1":map[string]interface{}{
+			"predicate":map[string]interface{}{
+				"grade":[...]map[string]interface{}{{
+					"op": ">",
+					"val": 3.6,
+				},
+				},
+			},
+			"column":[...]string{
+				"sid", "name", "age", "grade",
+			},
+		},
+	}
+	studentTablePartitionRules, _ := json.Marshal(m)
 	ts := &TableSchema{TableName: studentTableName, ColumnSchemas: []ColumnSchema{
 		{Name: "sid", DataType: TypeInt32},
 		{Name: "name", DataType: TypeString},
@@ -25,7 +54,7 @@ func ignoredTestLab2Basic(t *testing.T) {
 		{Name: "grade", DataType: TypeFloat},
 	}}
 	replyMsg := ""
-	cli.Call("Cluster.CreateTable", []interface{}{ts, studentTablePartitionRules}, replyMsg)
+	cli.Call("Cluster.BuildTable", []interface{}{ts, studentTablePartitionRules}, replyMsg)
 
 	studentRows := []Row{
 		{0, "John", 22, 4.0},
@@ -34,17 +63,31 @@ func ignoredTestLab2Basic(t *testing.T) {
 	}
 	replyMsg = ""
 	for _, row := range studentRows {
-		cli.Call("Cluster.Insert", []interface{}{studentTableName, row}, &replyMsg)
+		cli.Call("Cluster.FragmentWrite", []interface{}{studentTableName, row}, &replyMsg)
 	}
 
 	courseRegistrationTableName := "courseRegistration"
-	courseRegistrationTablePartitionRules := "some rules for course registration table"
+	m = map[string]interface{}{
+		"2":map[string]interface{}{
+			"predicate":map[string]interface{}{
+				"courseId":[...]map[string]interface{}{{
+					"op": ">=",
+					"val": 0,
+				},
+				},
+			},
+			"column":[...]string{
+				"sid", "courseId",
+			},
+		},
+	}
+	courseRegistrationTablePartitionRules, _ := json.Marshal(m)
 	ts = &TableSchema{TableName: courseRegistrationTableName, ColumnSchemas: []ColumnSchema{
 		{Name: "sid", DataType: TypeInt32},
 		{Name: "courseId", DataType: TypeInt32},
 	}}
 	replyMsg = ""
-	cli.Call("Cluster.CreateTable", []interface{}{ts, courseRegistrationTablePartitionRules}, replyMsg)
+	cli.Call("Cluster.BuildTable", []interface{}{ts, courseRegistrationTablePartitionRules}, replyMsg)
 
 	courseRegistrationRows := []Row{
 		{0, 0},
@@ -54,7 +97,7 @@ func ignoredTestLab2Basic(t *testing.T) {
 	}
 	replyMsg = ""
 	for _, row := range courseRegistrationRows {
-		cli.Call("Cluster.Insert", []interface{}{courseRegistrationTableName, row}, &replyMsg)
+		cli.Call("Cluster.FragmentWrite", []interface{}{courseRegistrationTableName, row}, &replyMsg)
 	}
 
 	// perform a join and check the result
