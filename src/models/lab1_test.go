@@ -63,7 +63,6 @@ func ignoredTestLab1Basic(t *testing.T) {
 
 	// use the client to create table and insert
 	budgetTableName := "budget"
-	budgetTablePartitionRules := "some rules for student table"
 	ts := &TableSchema{TableName: budgetTableName, ColumnSchemas: []ColumnSchema{
 		{Name: "PNO", DataType: TypeString},
 		{Name: "PNAME", DataType: TypeString},
@@ -71,16 +70,16 @@ func ignoredTestLab1Basic(t *testing.T) {
 		{Name: "LOC", DataType: TypeString},
 	}}
 	replyMsg := ""
-	cli.Call("Cluster.BuildTable", []interface{}{ts, budgetTablePartitionRules}, replyMsg)
+	cli.Call("Cluster.BuildTable", []interface{}{ts, rules}, replyMsg)
 
-	studentRows := []Row{
+	budgetRows := []Row{
 		{"P1", "Instrumentation", 150000, "Montreal"},
 		{"P2", "Database Develop.", 135000, "New York"},
 		{"P3", "CAD/CAM", 250000, "New York"},
 		{"P4", "Maintenance", 310000, "Paris"},
 	}
 	replyMsg = ""
-	for _, row := range studentRows {
+	for _, row := range budgetRows {
 		cli.Call("Cluster.FragmentWrite", []interface{}{budgetTableName, row}, &replyMsg)
 	}
 
