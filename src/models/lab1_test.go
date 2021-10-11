@@ -7,7 +7,7 @@ import (
 import "../labrpc"
 import "encoding/json"
 
-func ignoredTestLab1Basic(t *testing.T) {
+func TestLab1Basic(t *testing.T) {
 	// set up a network and a cluster
 	clusterName := "MyCluster"
 	network := labrpc.MakeNetwork()

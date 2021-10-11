@@ -6,7 +6,7 @@ import (
 )
 import "../labrpc"
 
-func ignoredTestLab2Basic(t *testing.T) {
+func TestLab2Basic(t *testing.T) {
 	// set up a network and a cluster
 	clusterName := "MyCluster"
 	network := labrpc.MakeNetwork()
