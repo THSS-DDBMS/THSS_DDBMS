@@ -1,6 +1,7 @@
 package models
 
 import (
+	"../labgob"
 	"../labrpc"
 	"fmt"
 	"strconv"
@@ -35,6 +36,9 @@ type Cluster struct {
 // the lab, a "Node" is responsible for processing distributed affairs but a "Server" simply receives messages from the
 // net work.
 func NewCluster(nodeNum int, network *labrpc.Network, clusterName string) *Cluster {
+	labgob.Register(TableSchema{})
+	labgob.Register(Row{})
+
 	nodeIds := make([]string, nodeNum)
 	nodeNamePrefix := "Node"
 	for i := 0; i < nodeNum; i++ {
