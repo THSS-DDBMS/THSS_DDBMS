@@ -1,7 +1,7 @@
 package models
 
 import (
-	"../labrpc"
+	"THSS_DDBMS/src/labrpc"
 	"fmt"
 	"strconv"
 	"testing"

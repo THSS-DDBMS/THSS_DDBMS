@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"testing"
 )
-import "../labrpc"
+import "THSS_DDBMS/src/labrpc"
 
 func ignoredTestLab2Basic(t *testing.T) {
 	// set up a network and a cluster

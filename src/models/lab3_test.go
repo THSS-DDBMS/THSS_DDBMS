@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"testing"
 
-	"../labrpc"
+	"THSS_DDBMS/src/labrpc"
 )
 
 func ignoredTestLab3Basic(t *testing.T) {

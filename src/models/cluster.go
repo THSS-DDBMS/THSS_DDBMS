@@ -1,8 +1,8 @@
 package models
 
 import (
-	"../labgob"
-	"../labrpc"
+	"THSS_DDBMS/src/labgob"
+	"THSS_DDBMS/src/labrpc"
 	"fmt"
 	"strconv"
 )

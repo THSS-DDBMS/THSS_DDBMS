@@ -50,7 +50,7 @@ package labrpc
 //
 
 import (
-	"../labgob"
+	"THSS_DDBMS/src/labgob"
 	"fmt"
 )
 import "bytes"

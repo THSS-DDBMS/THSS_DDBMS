@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"testing"
 )
-import "../labrpc"
+import "THSS_DDBMS/src/labrpc"
 import "encoding/json"
 
 func TestLab1Basic(t *testing.T) {
