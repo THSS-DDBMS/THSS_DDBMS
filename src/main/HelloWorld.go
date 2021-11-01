@@ -1,8 +1,8 @@
 package main
 
 import (
-	"../labrpc"
-	"../models"
+	"THSS_DDBMS/src/labrpc"
+	"THSS_DDBMS/src/models"
 	"fmt"
 )
 
