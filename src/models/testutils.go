@@ -31,7 +31,7 @@ func compareRows(a []Row, b []Row, columnMapping []int) bool {
 	for _, rowB := range b {
 		matched := false
 		for _, rowA := range a {
-			if rowB.EqualsWithColumnMapping(&rowA, columnMapping) {
+			if rowA.EqualsWithColumnMapping(&rowB, columnMapping) {
 				matched = true
 				break
 			}
