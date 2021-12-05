@@ -200,7 +200,7 @@ func TestLab3FullyOverlapping(t *testing.T) {
 
 // two tables are distributed to node0
 func TestLab3FullyCentralized(t *testing.T) {
-	setup()
+	setupLab3()
 
 	// use the client to create table and insert
 	// divide student table into two partitions and assign them to node0 and node1
