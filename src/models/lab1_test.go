@@ -1335,7 +1335,7 @@ func TestLab1Case9(t *testing.T) {
 
 	// create fragment rules
 	var i interface{}
-	err := json.Unmarshal([]byte(`{"0":{"predicate":{"sale_price":[{"op":"<=","val":50000}],"verified_by":[{"op":"==","val":"TITLE COMPANY"}]},"column":["object_id","address","sale_price","sale_terms","verified_by"]},"1":{"predicate":{"sale_price":[{"op":"<=","val":50000}],"verified_by":[{"op":"==","val":"PROPERTY TRANSFER AFFIDAVIT"}]},"column":["object_id","address","sale_price","sale_terms","verified_by"]},"2":{"predicate":{"sale_price":[{"op":"<=","val":50000}],"verified_by":[{"op":"==","val":"DEED"}]},"column":["object_id","address","sale_price","sale_terms","verified_by"]},"3":{"predicate":{"sale_price":[{"op":">","val":50000}]},"column":["object_id","address","verified_by"]},"4":{"predicate":{"sale_price":[{"op":">","val":200000}]},"column":["object_id","sale_price","sale_terms"]}}`), &i)
+	err := json.Unmarshal([]byte(`{"0":{"predicate":{"sale_price":[{"op":"<=","val":50000}],"verified_by":[{"op":"==","val":"TITLE COMPANY"}]},"column":["object_id","address","sale_price","sale_terms","verified_by"]},"1":{"predicate":{"sale_price":[{"op":"<=","val":50000}],"verified_by":[{"op":"==","val":"PROPERTY TRANSFER AFFIDAVIT"}]},"column":["object_id","address","sale_price","sale_terms","verified_by"]},"2":{"predicate":{"sale_price":[{"op":"<=","val":50000}],"verified_by":[{"op":"==","val":"DEED"}]},"column":["object_id","address","sale_price","sale_terms","verified_by"]},"3":{"predicate":{"sale_price":[{"op":">","val":50000}]},"column":["object_id","address","verified_by"]},"4":{"predicate":{"sale_price":[{"op":">","val":50000}]},"column":["object_id","sale_price","sale_terms"]}}`), &i)
 	if err != nil {return}
 	m := i.(map[string]interface{})
 	rules,_ := json.Marshal(m)
@@ -1500,9 +1500,9 @@ func TestLab1Case9(t *testing.T) {
 		t.Errorf("Incorrect join results, expected %v, actual %v", expectedDataset2, table2)
 	}
 	if !compareDataset(expectedDataset3, table3) {
-		t.Errorf("Incorrect join results, expected %v, actual %v", expectedDataset2, table2)
+		t.Errorf("Incorrect join results, expected %v, actual %v", expectedDataset3, table3)
 	}
 	if !compareDataset(expectedDataset4, table4) {
-		t.Errorf("Incorrect join results, expected %v, actual %v", expectedDataset2, table2)
+		t.Errorf("Incorrect join results, expected %v, actual %v", expectedDataset4, table4)
 	}
 }
